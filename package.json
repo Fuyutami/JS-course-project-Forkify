@@ -1,0 +1,30 @@
+{
+  "name": "forkify",
+  "version": "1.0.0",
+  "description": "Recipe application",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fuyutami/JS-course-project-Forkify.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fuyutami/JS-course-project-Forkify/issues"
+  },
+  "homepage": "https://github.com/Fuyutami/JS-course-project-Forkify#readme",
+  "dependencies": {
+    "core-js": "^3.17.2",
+    "fractional": "^1.0.0",
+    "parcel": "^2.0.0-rc.0",
+    "regenerator-runtime": "^0.13.9",
+    "sass": "^1.39.0"
+  },
+  "devDependencies": {
+    "@parcel/transformer-image": "^2.0.0-rc.0",
+    "@parcel/transformer-sass": "^2.0.0-rc.0"
+  }
+}
