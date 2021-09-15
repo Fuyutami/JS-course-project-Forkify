@@ -1,9 +1,11 @@
 import * as model from './model.js'
+import { MODAL_CLOSE_SEC } from './config.js'
 import recipeView from './views/recipeView'
 import searchView from './views/searchView'
 import resultsView from './views/resultsView.js'
 import paginationView from './views/paginationView.js'
 import bookmarksView from './views/bookmarksView.js'
+import addRecipeView from './views/addRecipeView.js'
 
 
 import 'core-js/stable' // for polyfilling everything else
@@ -33,6 +35,8 @@ const controlRecipes = async function () {
 
     // Update results view to mark selected search result
     resultsView.update(model.getSearchResultPage())
+
+    // Updatin
     bookmarksView.update(model.state.bookmarks)
 
    
@@ -69,7 +73,6 @@ const controlSearchResults = async function () {
     console.log(err)
   }
 }
-controlSearchResults()
 
 const controlPagination = function (goToPage) {
   // 1) Render NEW results
@@ -101,12 +104,50 @@ const controlAddBookmark = function () {
   bookmarksView.render(model.state.bookmarks)
 }
 
+const controlBookmarks = function () {
+  bookmarksView.render(model.state.bookmarks)
+}
+
+const controlAddRecipe = async function (newRecipe) {
+  try {
+  // Show loading spinner
+  addRecipeView.renderSpinner()
+  // Upload the new recipe data
+  await model.uploadRecipe(newRecipe)
+
+  // Render recipe
+  recipeView.render(model.state.recipe)
+  
+
+  // Success message
+  addRecipeView.renderMessage()
+
+  // Render bookmark view
+  bookmarksView.render(model.state.bookmarks)
+
+  // Change ID in URL
+ window.history.pushState(null, '', `#${model.state.recipe.id}`)
+
+  // Close form window
+  setTimeout(function () {
+    addRecipeView.toggleWindow()
+  }, MODAL_CLOSE_SEC * 1000)
+  } catch (err) {
+    console.error('😡', err)
+    addRecipeView.renderError(err.message)
+  }
+
+  
+}
+
 const init = function () {
+  bookmarksView.addHandlerRender(controlBookmarks)
   recipeView.addHandlerRender(controlRecipes)
   recipeView.addHandlerUpdateServings(controlServings)
   recipeView.addHandlerAddBookmark(controlAddBookmark)
   searchView.addHandlerSearch(controlSearchResults)
   paginationView.addHandlerClick(controlPagination)
+  addRecipeView.addHandlerUpload(controlAddRecipe)
 }
 
 init()
